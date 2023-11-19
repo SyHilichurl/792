@@ -1,0 +1,20 @@
+Package: checkalign
+Version: 0.0.0.9000
+Date: 2023-11-17
+Title: My Collection of Final
+Authors@R: c(person("Shiyi", "Developer", role = c("aut", "cre"),
+                     email = "sche753@aucklanduni.ac.nz"),
+              person("Paul", "Developer", role = "ctb"))
+Author: Shiyi Developer [aut, cre],
+  Paul [ctb]
+Maintainer: Shiyi Developer <sche753@aucklanduni.ac.nz>
+Depends: R (>= 4.2.1), grid
+Imports: grid
+Suggests: ggplot2, lattice
+Description: Check if graphics follow some design principles
+License: GPL (>= 3)
+URL: https://github.com/SyHilichurl/792
+BugReports: https://github.com/SyHilichurl/792/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3

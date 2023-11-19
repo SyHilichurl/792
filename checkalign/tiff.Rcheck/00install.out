@@ -1,0 +1,14 @@
+* installing *source* package 'tiff' ...
+** 成功将'tiff'程序包解包并MD5和检查
+** using staged installation
+
+   **********************************************
+   WARNING: this package has a configure script
+         It probably needs manual configuration
+   **********************************************
+
+
+** libs
+Warning in system(cmd) : 'make' not found
+ERROR: compilation failed for package 'tiff'
+* removing 'C:/Users/Acer/Desktop/checkalign/checkalign/tiff.Rcheck/tiff'
