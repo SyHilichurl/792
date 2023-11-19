@@ -5,7 +5,7 @@
 #'
 #' @return l,r,b,t,index1,index2,len
 #' @export
-#'
+#' @importFrom textCoords
 #' @examples
 getGrobInfo <- function(listing, separateText) {
   grobInfo <- list()
