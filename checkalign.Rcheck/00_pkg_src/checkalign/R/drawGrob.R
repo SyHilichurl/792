@@ -1,3 +1,11 @@
+#' Title
+#'
+#' @param grobInfo
+#' @param exclude
+#'
+#' @return
+#'
+#' @examples
 excludeGrob <- function(grobInfo, exclude) {
   findMatch <- function(exclude) {
     sapply(grid.grep(exclude, grep = TRUE, global = TRUE), as.character)
@@ -9,7 +17,14 @@ excludeGrob <- function(grobInfo, exclude) {
   Filter(findGrob, grobInfo)
 }
 
-
+#' Title
+#'
+#' @param grobInfo
+#' @param include
+#'
+#' @return
+#'
+#' @examples
 includeGrob <- function(grobInfo, include) {
   findMatch <- function(include) {
     sapply(grid.grep(include, grep = TRUE, global = TRUE), as.character)
@@ -21,7 +36,16 @@ includeGrob <- function(grobInfo, include) {
   Filter(findGrob, grobInfo)
 }
 
-
+#' Title
+#'
+#' @param gPath
+#' @param vPath
+#' @param index
+#' @param len
+#'
+#' @return
+#'
+#' @examples
 editGrobIndex <- function(gPath, vPath, index, len) {
   name <- paste0(as.character(gPath), ".", as.character(index), ".highlight")
   grob2 <- grid.get(gPath)
@@ -35,7 +59,15 @@ editGrobIndex <- function(gPath, vPath, index, len) {
   upViewport(0)
 }
 
-
+#' Title
+#'
+#' @param notAlignInfo
+#' @param listing
+#' @param item
+#'
+#' @return
+#'
+#' @examples
 drawNotAligned <- function(notAlignInfo, listing, item) {
   if (length(notAlignInfo) != 0) {
     cat("\nNot Aligned!!\n")
@@ -52,7 +84,14 @@ drawNotAligned <- function(notAlignInfo, listing, item) {
 }
 
 
-
+#' Title
+#'
+#' @param x
+#' @param rounding
+#'
+#' @return
+#'
+#' @examples
 nameFour <- function(x, rounding) {
   x_str <- as.character(round(x,rounding-1))
   x_str <- gsub("\\.", "", x_str)
@@ -60,7 +99,16 @@ nameFour <- function(x, rounding) {
   result
 }
 
-
+#' Title
+#'
+#' @param matchInfo
+#' @param grobInfo
+#' @param item
+#' @param r
+#'
+#' @return
+#'
+#' @examples
 drawMatch <- function(matchInfo, grobInfo, item, r, align) {
   # findMatch <- function(item) {
   #   sapply(grid.grep(item, grep = TRUE, global = TRUE), as.character)

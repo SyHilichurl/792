@@ -1,0 +1,16 @@
+calcInfo                Title
+checkAlignment          Title
+checkAndDraw            Title
+checkNotAligned         Title
+drawAlignment           Title
+drawMatch               Title
+drawNotAligned          Title
+editGrobIndex           Title
+excludeGrob             Title
+getBounds               Title
+getBoundsInfo           Title
+getGrobInfo             Title
+includeGrob             Title
+matchAlignment          Title
+nameFour                Title
+textCoords              Convert TextGrobs

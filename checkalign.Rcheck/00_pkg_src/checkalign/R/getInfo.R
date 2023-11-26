@@ -1,4 +1,12 @@
+#' Title
+#'
+#' @param listing
+#' @param separateText
+#'
+#' @return l,r,b,t,index1,index2,len
+#' @export
 #' @importFrom textCoords
+#' @examples
 getGrobInfo <- function(listing, separateText) {
   # output: l,r,b,t,index1,index2,len
   # the index2 in len shape of the index1 grob in the listing
@@ -40,7 +48,15 @@ getGrobInfo <- function(listing, separateText) {
   grobInfo
 }
 
-
+#' Title
+#'
+#' @param grobInfo
+#' @param index
+#' @param rounding
+#'
+#' @return
+#'
+#' @examples
 getBounds <- function(grobInfo, index, rounding = 4) {
   if (length(grobInfo)>0) {
     bounds <- round(sapply(grobInfo, function(x) x[index]),
@@ -52,7 +68,14 @@ getBounds <- function(grobInfo, index, rounding = 4) {
   }
 }
 
-
+#' Title
+#'
+#' @param grobInfo
+#' @param rounding
+#'
+#' @return
+#'
+#' @examples
 getBoundsInfo <- function(grobInfo, rounding = 4){
   leftBounds <- getBounds(grobInfo, 1, rounding)
   rightBounds <- getBounds(grobInfo, 2, rounding)
@@ -64,7 +87,14 @@ getBoundsInfo <- function(grobInfo, rounding = 4){
   boundsInfo
 }
 
-
+#' Title
+#'
+#' @param grobInfo
+#' @param boundsInfo
+#'
+#' @return
+#'
+#' @examples
 checkNotAligned <- function(grobInfo, boundsInfo) {
   l <- which(boundsInfo$left$bounds %in%
                setdiff(boundsInfo$left$boundsUni, boundsInfo$right$boundsUni))
@@ -79,7 +109,13 @@ checkNotAligned <- function(grobInfo, boundsInfo) {
   notAlignInfo
 }
 
-
+#' Title
+#'
+#' @param boundsInfo
+#'
+#' @return
+#'
+#' @examples
 matchAlignment <- function(boundsInfo) {
   x <- unique(c(boundsInfo[[1]]$bounds[boundsInfo[[1]]$dup],
                 boundsInfo[[2]]$bounds[boundsInfo[[2]]$dup]))

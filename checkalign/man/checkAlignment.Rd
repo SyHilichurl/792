@@ -2,29 +2,54 @@
 % Please edit documentation in R/checkAlignment.R
 \name{checkAlignment}
 \alias{checkAlignment}
-\title{Title}
+\title{checkAlignment}
 \usage{
-checkAlignment(
-  x,
-  show = "both",
-  include = ".",
-  exclude = NULL,
-  separateText = TRUE,
-  rounding
-)
+checkAlignment(g, show = "both", align=.5,
+include=".", exclude=NULL, separateText = TRUE, rounding=4)
 }
 \arguments{
-\item{x}{graphic}
+\item{x}{A graphic value (e.g. a ggplot)}
 
-\item{show}{both, unaligned, aligned}
+\item{show}{A character value indicating which hints to be shown.
+Possible values are "both", "unaligned", and "aligned".}
 
-\item{separateText}{define if the elements textgrob need to be separated}
+\item{align}{A numeric value indicating which hints of aligned elements to be shown.
+0 means vertical alignments, 1 means horizontal alignments and default value 0.5
+means both.}
 
-\item{rounding}{}
+\item{include}{A character value or vector indicating which kind of elements will be checked.
+Default value is "." (e.g. "text", "axis", "lab")}
+
+\item{exclude}{A character value or vector indicating which kind of elements will not be checked.
+Default value is NULL. (e.g. "text", "axis", "lab")}
+
+\item{separateText}{A logical value indicating if the elements in a textgrob will be separated.
+If "TRUE", all the element in a textgrob will be regarded as different elements.
+If "FALSE", all the element in a textgrob will be regarded as a unity.}
+
+\item{rounding}{A numeric value indicating the decimal point precision used in checking.}
 }
 \value{
-draw graphics with alignment hint and return a list of aligned grobs
+A table to show the aligned elements.
 }
 \description{
-Title
+Check if the arrangement of elements follows the design principle of alignment,
+that is all the elements are aligned with at least one another element of the
+plot horizontally or vertically.
+Mark the isolated elements in red, and aligned elements in blue.
+Return a list of aligned elements' names.
+}
+\examples{
+\dontrun{
+  if (require(ggplot2)) {
+    g <- ggplot(mtcars) + geom_point(aes(disp, mpg, color=factor(vs))) +
+         labs(title = "test") + facet_wrap(~gear)
+    checkAlignment(g, include="text", exclude=c("tag", "points"), rounding=4)
+  } else {
+    warning("The example requires 'ggplot2' which is not installed.")
+  }
+}
+}
+\seealso{
+\code{\link[grid]{grid.ls}}
 }

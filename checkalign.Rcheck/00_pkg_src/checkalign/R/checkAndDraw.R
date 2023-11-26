@@ -1,4 +1,12 @@
+#' Title
+#'
+#' @param listing
+#' @param separateText
+#' @param rounding
+#'
+#' @return
 #' @importFrom getInfo
+#' @examples
 calcInfo <- function(listing, separateText, rounding=4) {
   grobInfo <- getGrobInfo(listing, separateText)
   boundsInfo <- getBoundsInfo(grobInfo, rounding)
@@ -10,8 +18,18 @@ calcInfo <- function(listing, separateText, rounding=4) {
   info
 }
 
-
+#' Title
+#'
+#' @param listing
+#' @param info
+#' @param show
+#' @param include
+#' @param exclude
+#' @param rounding
+#'
+#' @return
 #' @importFrom drawGrob
+#' @examples
 drawAlignment <- function(listing, info, show = "both", align = .5,
                           include=".", exclude=NULL, rounding=4) {
   grobInfoF <- info$grobInfo
@@ -33,7 +51,18 @@ drawAlignment <- function(listing, info, show = "both", align = .5,
   }
 }
 
-
+#' Title
+#'
+#' @param show
+#' @param include
+#' @param exclude
+#' @param separateText
+#' @param rounding
+#'
+#' @return
+#' @export
+#'
+#' @examples
 checkAndDraw <- function(show, align, include, exclude, separateText, rounding) {
   listing <- do.call(cbind, grid.ls(view=TRUE))
   info <- calcInfo(listing, separateText, rounding)

@@ -1,0 +1,16 @@
+calcInfo	calcInfo
+checkAlignment	checkAlignment
+checkAndDraw	checkAndDraw
+checkNotAligned	checkNotAligned
+drawAlignment	drawAlignment
+drawMatch	drawMatch
+drawNotAligned	drawNotAligned
+editGrobIndex	editGrobIndex
+excludeGrob	excludeGrob
+getBounds	getBounds
+getBoundsInfo	getBoundsInfo
+getGrobInfo	getGrobInfo
+includeGrob	includeGrob
+matchAlignment	matchAlignment
+nameFour	nameFour
+textCoords	textCoords

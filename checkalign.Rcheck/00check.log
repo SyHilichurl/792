@@ -1,0 +1,201 @@
+* using log directory 'C:/Users/Acer/Documents/GitHub/792/checkalign.Rcheck'
+* using R version 4.2.1 (2022-06-23 ucrt)
+* using platform: x86_64-w64-mingw32 (64-bit)
+* using session charset: UTF-8
+* using options '--no-manual --as-cran'
+* checking for file 'checkalign/DESCRIPTION' ... OK
+* this is package 'checkalign' version '0.0.0.9000'
+* package encoding: UTF-8
+* checking package namespace information ... OK
+* checking package dependencies ... NOTE
+Package suggested but not available for checking: 'girdGraphics'
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking whether package 'checkalign' can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking for future file timestamps ... OK
+* checking DESCRIPTION meta-information ... NOTE
+Malformed Description field: should contain one or more complete sentences.
+Package listed in more than one of Depends, Imports, Suggests, Enhances:
+  'grid'
+A package should be listed in only one of these fields.
+ WARNING
+Dependence on R version '4.2.1' not with patchlevel 0
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking dependencies in R code ... NOTE
+'::'或':::'引进没有被声明: 'gridGraphics'
+Namespace in Imports field not imported from: 'grid'
+  All declared Imports should be used.
+Package in Depends field not imported from: 'grid'
+  These packages need to be imported from (in the NAMESPACE file)
+  for when this namespace is loaded but not attached.
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+checkAlignment.function: no visible global function definition for
+  'grid.newpage'
+checkAlignment.ggplot: no visible global function definition for
+  'grid.force'
+checkAlignment.recordedplot: no visible global function definition for
+  'replayPlot'
+checkAndDraw: no visible global function definition for 'grid.ls'
+drawAlignment: no visible global function definition for 'grid.rect'
+drawAlignment: no visible global function definition for 'gpar'
+drawAlignment: no visible global function definition for 'rgb'
+drawMatch: no visible global function definition for 'grid.rect'
+drawMatch: no visible global function definition for 'gpar'
+drawMatch: no visible global function definition for 'rgb'
+drawMatch: no visible global function definition for 'grid.lines'
+editGrobIndex: no visible global function definition for 'grid.get'
+editGrobIndex: no visible global function definition for 'rgb'
+editGrobIndex: no visible global function definition for 'downViewport'
+editGrobIndex: no visible global function definition for 'editGrob'
+editGrobIndex: no visible global function definition for 'gpar'
+editGrobIndex: no visible global function definition for 'grid.draw'
+editGrobIndex: no visible global function definition for 'upViewport'
+excludeGrob : findMatch: no visible global function definition for
+  'grid.grep'
+getGrobInfo: no visible global function definition for 'grid.get'
+getGrobInfo: no visible global function definition for 'downViewport'
+getGrobInfo: no visible global function definition for 'grobCoords'
+getGrobInfo: no visible global function definition for 'deviceLoc'
+getGrobInfo: no visible global function definition for 'unit'
+getGrobInfo: no visible global function definition for 'upViewport'
+includeGrob : findMatch: no visible global function definition for
+  'grid.grep'
+textCoords : <anonymous>: no visible binding for global variable 'gpar'
+textCoords : <anonymous>: no visible global function definition for
+  'gpar'
+textCoords : <anonymous>: no visible global function definition for
+  'grobCoords'
+textCoords : <anonymous>: no visible global function definition for
+  'textGrob'
+textCoords: no visible global function definition for 'gridGrobCoords'
+Undefined global functions or variables:
+  deviceLoc downViewport editGrob gpar grid.draw grid.force grid.get
+  grid.grep grid.lines grid.ls grid.newpage grid.rect gridGrobCoords
+  grobCoords replayPlot rgb textGrob unit upViewport
+Consider adding
+  importFrom("grDevices", "replayPlot", "rgb")
+to your NAMESPACE file.
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... WARNING
+使用手冊对象'calcInfo'有未公开的参数
+  'listing' 'separateText'
+
+使用手冊对象'checkAlignment'有未公开的参数
+  'align' 'include' 'exclude'
+
+使用手冊对象'checkAndDraw'有未公开的参数
+  'show' 'align' 'include' 'exclude' 'separateText'
+
+使用手冊对象'checkNotAligned'有未公开的参数
+  'grobInfo'
+
+使用手冊对象'drawAlignment'有未公开的参数
+  'listing' 'info' 'show' 'align' 'include' 'exclude'
+
+使用手冊对象'drawMatch'有未公开的参数
+  'matchInfo' 'grobInfo' 'item' 'align'
+
+使用手冊对象'drawNotAligned'有未公开的参数
+  'notAlignInfo' 'listing'
+
+使用手冊对象'editGrobIndex'有未公开的参数
+  'gPath' 'vPath' 'index'
+
+使用手冊对象'excludeGrob'有未公开的参数
+  'grobInfo'
+
+使用手冊对象'getBounds'有未公开的参数
+  'grobInfo' 'index'
+
+使用手冊对象'getBoundsInfo'有未公开的参数
+  'grobInfo'
+
+使用手冊对象'getGrobInfo'有未公开的参数
+  'listing'
+
+使用手冊对象'includeGrob'有未公开的参数
+  'grobInfo'
+
+使用手冊对象'nameFour'有未公开的参数
+  'x'
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter 'Writing R documentation files' in the 'Writing R
+Extensions' manual.
+* checking Rd contents ... WARNING
+Rd对象'calcInfo'里存在没有描述的参数：
+  'rounding'
+
+Rd对象'checkAlignment'里存在没有描述的参数：
+  'rounding'
+
+Rd对象'checkAndDraw'里存在没有描述的参数：
+  'rounding'
+
+Rd对象'checkNotAligned'里存在没有描述的参数：
+  'boundsInfo'
+
+Rd对象'drawAlignment'里存在没有描述的参数：
+  'rounding'
+
+Rd对象'drawMatch'里存在没有描述的参数：
+  'r'
+
+Rd对象'drawNotAligned'里存在没有描述的参数：
+  'item'
+
+Rd对象'editGrobIndex'里存在没有描述的参数：
+  'len'
+
+Rd对象'excludeGrob'里存在没有描述的参数：
+  'exclude'
+
+Rd对象'getBounds'里存在没有描述的参数：
+  'rounding'
+
+Rd对象'getBoundsInfo'里存在没有描述的参数：
+  'rounding'
+
+Rd对象'getGrobInfo'里存在没有描述的参数：
+  'separateText'
+
+Rd对象'includeGrob'里存在没有描述的参数：
+  'include'
+
+Rd对象'matchAlignment'里存在没有描述的参数：
+  'boundsInfo'
+
+Rd对象'nameFour'里存在没有描述的参数：
+  'rounding'
+
+* checking for unstated dependencies in examples ... OK
+* checking examples ... NONE
+* checking for non-standard things in the check directory ... OK
+* checking for detritus in the temp directory ... OK
+* DONE
+Status: 3 WARNINGs, 4 NOTEs
