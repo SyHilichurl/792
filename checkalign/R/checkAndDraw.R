@@ -12,7 +12,7 @@ calcInfo <- function(listing, separateText, rounding=4) {
 
 
 #' @importFrom drawGrob
-drawAlignment <- function(listing, info, show = "both", align = .5,
+drawAlignment <- function(listing, info, show = "both", align = "b",
                           include=".", exclude=NULL, rounding=4) {
   grobInfoF <- info$grobInfo
   if (length(include))
@@ -22,14 +22,19 @@ drawAlignment <- function(listing, info, show = "both", align = .5,
   item <- sapply(grobInfoF, function(x) attr(x, "name"))
 
   grid.rect(gp = gpar(fill = rgb(1,1,1,0.7), col=NA), name = "shade.highlight")
-  if(show == "unaligned" | show == "both")
+  if(show == "unaligned" | show == "both") {
     drawNotAligned(info$notAlignInfo, listing, item)
+    dev.off()
+  }
   if(show == "aligned" | show == "both") {
     #   drawSameSide(info$boundsInfo) # e.g. left & left
     #   drawDiffSide(info$boundsInfo) # e.g. left & right
     # }
-    res <- drawMatch(info$matchInfo, info$grobInfo, item, rounding, align)
+    png("plot2.png")
+    RandC <- countFacets(info$matchInfo, info$grobInfo, item, rounding, align)
+    res <- drawMatch(info$matchInfo, info$grobInfo, item, rounding, align, RandC)
     table(res)
+    dev.off()
   }
 }
 
@@ -40,4 +45,13 @@ checkAndDraw <- function(show, align, include, exclude, separateText, rounding) 
   rounding <- attr(info, "rounding")
   drawAlignment(listing, info, show, align,
                 include, exclude, rounding)
+  p1 <- readPNG("plot1.png")
+  p2 <- readPNG("plot2.png")
+  grid.newpage()
+  pushViewport(viewport(x=0, width=.5, just="left"))
+  grid.raster(p1)
+  popViewport()
+  pushViewport(viewport(x=.5, width=.5, just="left"))
+  grid.raster(p2)
+  popViewport()
 }

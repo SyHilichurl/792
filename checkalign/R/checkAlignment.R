@@ -8,7 +8,7 @@
 #' Return a list of aligned elements' names.
 #'
 #' @usage
-#' checkAlignment(g, show = "both", align=.5,
+#' checkAlignment(g, show = "both", align="b",
 #' include=".", exclude=NULL, separateText = TRUE, rounding=4)
 #' @param x
 #' A graphic value (e.g. a ggplot)
@@ -17,7 +17,7 @@
 #' Possible values are "both", "unaligned", and "aligned".
 #' @param align
 #' A numeric value indicating which hints of aligned elements to be shown.
-#' 0 means vertical alignments, 1 means horizontal alignments and default value 0.5
+#' v means vertical alignments, h means horizontal alignments and default value b
 #' means both.
 #' @param include
 #' A character value or vector indicating which kind of elements will be checked.
@@ -46,23 +46,24 @@
 #'     warning("The example requires 'ggplot2' which is not installed.")
 #'   }
 #' }
-checkAlignment <- function(x, show = "both", align=.5,
+checkAlignment <- function(x, show = "both", align="b",
                            include=".", exclude=NULL,
                            separateText = TRUE, rounding) {
   UseMethod("checkAlignment")
 }
 
 #' @export
-checkAlignment.ggplot <- function(x, show = "both", align=.5,
+checkAlignment.ggplot <- function(x, show = "both", align="b",
                                   include=".", exclude=NULL,
                                   separateText = TRUE, rounding=4) {
+  png("plot1.png")
   print(x)
   grid.force()
   checkAndDraw(show, align, include, exclude, separateText, rounding)
 }
 
 #' @export
-checkAlignment.trellis <- function(x, show = "both", align=.5,
+checkAlignment.trellis <- function(x, show = "both", align="b",
                                    include=".", exclude=NULL,
                                    separateText = TRUE, rounding=4) {
   print(x)
@@ -70,7 +71,7 @@ checkAlignment.trellis <- function(x, show = "both", align=.5,
 }
 
 #' @export
-checkAlignment.function <- function(x, show = "both", align=.5,
+checkAlignment.function <- function(x, show = "both", align="b",
                                     include=".", exclude=NULL,
                                     separateText = TRUE, rounding=4) {
   grid.newpage()
@@ -79,7 +80,7 @@ checkAlignment.function <- function(x, show = "both", align=.5,
 }
 
 #' @export
-checkAlignment.recordedplot <- function(x, show = "both", align=.5,
+checkAlignment.recordedplot <- function(x, show = "both", align="b",
                                         include=".", exclude=NULL,
                                         separateText = TRUE, rounding=4) {
   replayPlot(x)

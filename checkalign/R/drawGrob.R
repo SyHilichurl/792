@@ -60,14 +60,57 @@ nameFour <- function(x, rounding) {
   result
 }
 
+countFacets <- function(matchInfo, grobInfo, item, r, align) {
+  cnt=0
+  if (align=="b" | align=="v") {
+    for (index in seq_along(matchInfo$x)) {
+      flag = FALSE
+      for (i in matchInfo$xAlignment[[index]])
+        if (attr(grobInfo[[i]], "name") %in% item) {
+          flag = TRUE
+          break
+        }
+      if (flag) {
+        cnt=cnt+1
+      }
+    }
+  }
+  if (align=="b" | align=="v") {
+    for (index in seq_along(matchInfo$y)) {
+      flag = FALSE
+      for (i in matchInfo$yAlignment[[index]])
+        if (attr(grobInfo[[i]], "name") %in% item) {
+          flag = TRUE
+          break
+        }
+      if (flag) {
+        cnt=cnt+1
+      }
+    }
+  }
+  cat("\nFacets ")
+  cat(grDevices::n2mfrow(cnt))
+  nrow <- n2mfrow(cnt)[1]
+  ncol <- n2mfrow(cnt)[2]
+  c(nrow, ncol)
+}
 
-drawMatch <- function(matchInfo, grobInfo, item, r, align) {
+
+drawMatch <- function(matchInfo, grobInfo, item, r, align, RandC) {
   # findMatch <- function(item) {
   #   sapply(grid.grep(item, grep = TRUE, global = TRUE), as.character)
   # }
   # matches <- unlist(lapply(item, findMatch))
+  nrow <- RandC[1]
+  ncol <- RandC[2]
+  vps <- viewport(width = ncol*grobInfo[[1]]["right"], height = nrow*grobInfo[[1]]["top"],
+                  default.units = "inch",
+                  layout = grid.layout(nrow, ncol))
+  pushViewport(vps)
+  j = 1
+
   matches <- logical(length(item))
-  if (align==0.5 | align==0) {
+  if (align=="b" | align=="v") {
     for (index in seq_along(matchInfo$x)) {
       flag = FALSE
       cnt = 1
@@ -77,6 +120,12 @@ drawMatch <- function(matchInfo, grobInfo, item, r, align) {
           break
         }
       if (flag) {
+        crow <- ceiling(j / ncol)
+        ccol <- j %% ncol
+        ccol[ccol == 0] <- ncol
+        cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
+        print(g, vp=cvp)
+        j = j + 1
         for (i in matchInfo$xAlignment[[index]]) {
           lty = 3
           tmp <- attr(grobInfo[[i]], "name")
@@ -85,24 +134,31 @@ drawMatch <- function(matchInfo, grobInfo, item, r, align) {
             matches[which(item==tmp)] <- TRUE
           }
           x = grobInfo[[i]][1]
-          width = grobInfo[[i]][2] - grobInfo[[i]][1]
+          width = (grobInfo[[i]][2] - grobInfo[[i]][1])
           y = grobInfo[[i]][3]
-          height = grobInfo[[i]][4] - grobInfo[[i]][3]
+          height = (grobInfo[[i]][4] - grobInfo[[i]][3])
+          # x = grobInfo[[i]][1]/ncol
+          # width = (grobInfo[[i]][2] - grobInfo[[i]][1])/ncol
+          # y = grobInfo[[i]][3]/nrow
+          # height = (grobInfo[[i]][4] - grobInfo[[i]][3])/nrow
           name = paste0("x.", nameFour(x,r), ".", cnt, ".",
                         attr(grobInfo[[i]],"name"),".alignment")
           grid.rect(x = x, y = y, width = width, height = height,
                     default.units = "in", just = c(0, 0),
                     gp = gpar(col = "blue", fill = rgb(0,0,1,0.1), lty=lty),
-                    name = name)
+                    name = name, vp=cvp)
           cnt = cnt + 1
         }
         grid.lines(x = matchInfo$x[index], default.units = "in",
-                   gp = gpar(col = "blue"),
+                   gp = gpar(col = "blue"), vp=cvp,
                    name = paste0("x.", nameFour(matchInfo$x[index],r), ".alignment"))
+        # grid.lines(x = matchInfo$x[index]/ncol, default.units = "in",
+        #            gp = gpar(col = "blue"), vp=cvp,
+        #            name = paste0("x.", nameFour(matchInfo$x[index],r), ".alignment"))
       }
     }
   }
-  if (align==0.5 | align==1) {
+  if (align=="b" | align=="v") {
     for (index in seq_along(matchInfo$y)) {
       flag = FALSE
       cnt = 1
@@ -112,6 +168,13 @@ drawMatch <- function(matchInfo, grobInfo, item, r, align) {
           break
         }
       if (flag) {
+        crow <- ceiling(j / ncol)
+        ccol <- j %% ncol
+        ccol[ccol == 0] <- ncol
+        cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
+        grid.rect(vp=cvp)
+        print(g, vp=cvp)
+        j = j + 1
         for (i in matchInfo$yAlignment[[index]]) {
           lty = 3
           tmp <- attr(grobInfo[[i]], "name")
@@ -120,26 +183,35 @@ drawMatch <- function(matchInfo, grobInfo, item, r, align) {
             matches[which(item==tmp)] <- TRUE
           }
           x = grobInfo[[i]][1]
-          width = grobInfo[[i]][2] - grobInfo[[i]][1]
+          width = (grobInfo[[i]][2] - grobInfo[[i]][1])
           y = grobInfo[[i]][3]
-          height = grobInfo[[i]][4] - grobInfo[[i]][3]
+          height = (grobInfo[[i]][4] - grobInfo[[i]][3])
+          # x = grobInfo[[i]][1]/ncol
+          # width = (grobInfo[[i]][2] - grobInfo[[i]][1])/ncol
+          # y = grobInfo[[i]][3]/nrow
+          # height = (grobInfo[[i]][4] - grobInfo[[i]][3])/nrow
           name = paste0("y.", nameFour(y,r), ".", cnt, ".",
                         attr(grobInfo[[i]],"name"),".alignment")
           grid.rect(x = x, y = y, width = width, height = height,
                     default.units = "in", just = c(0, 0),
                     gp = gpar(col = "blue", fill = rgb(0,0,1,0.1), lty=lty),
-                    name = name)
+                    name = name, vp=cvp)
           cnt = cnt + 1
         }
         grid.lines(y = matchInfo$y[index], default.units = "in",
-                   gp = gpar(col = "blue"),
+                   gp = gpar(col = "blue"), vp=cvp,
                    name = paste0("y.", nameFour(matchInfo$y[index],r), ".alignment"))
+        # grid.lines(y = matchInfo$y[index]/nrow, default.units = "in",
+        #            gp = gpar(col = "blue"), vp=cvp,
+        #            name = paste0("y.", nameFour(matchInfo$y[index],r), ".alignment"))
       }
     }
   }
+  upViewport()
   if (length(item[matches])>0)
     cat("\nAligned!!\n")
   for (i in seq_along(item[matches]))
     cat(item[matches][i], "\n")
   item[matches]
 }
+
