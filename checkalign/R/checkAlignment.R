@@ -53,13 +53,13 @@ checkAlignment <- function(x, show = "both", align="b",
 }
 
 #' @export
-checkAlignment.ggplot <- function(x, show = "both", align="b",
+checkAlignment.ggplot <- function(g, show = "both", align="b",
                                   include=".", exclude=NULL,
                                   separateText = TRUE, rounding=4) {
   png("plot1.png")
-  print(x)
+  print(g)
   grid.force()
-  checkAndDraw(show, align, include, exclude, separateText, rounding)
+  checkAndDraw(g, show, align, include, exclude, separateText, rounding)
 }
 
 #' @export

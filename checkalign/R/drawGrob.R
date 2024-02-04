@@ -96,16 +96,17 @@ countFacets <- function(matchInfo, grobInfo, item, r, align) {
 }
 
 
-drawMatch <- function(matchInfo, grobInfo, item, r, align, RandC) {
+drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
   # findMatch <- function(item) {
   #   sapply(grid.grep(item, grep = TRUE, global = TRUE), as.character)
   # }
   # matches <- unlist(lapply(item, findMatch))
   nrow <- RandC[1]
   ncol <- RandC[2]
-  vps <- viewport(width = ncol*grobInfo[[1]]["right"], height = nrow*grobInfo[[1]]["top"],
-                  default.units = "inch",
-                  layout = grid.layout(nrow, ncol))
+  # vps <- viewport(width = ncol*grobInfo[[1]]["right"], height = nrow*grobInfo[[1]]["top"],
+  #                 default.units = "inch",
+  #                 layout = grid.layout(nrow, ncol))
+  vps <- viewport(layout = grid.layout(nrow, ncol))
   pushViewport(vps)
   j = 1
 
@@ -133,14 +134,14 @@ drawMatch <- function(matchInfo, grobInfo, item, r, align, RandC) {
             lty = 1
             matches[which(item==tmp)] <- TRUE
           }
-          x = grobInfo[[i]][1]
-          width = (grobInfo[[i]][2] - grobInfo[[i]][1])
-          y = grobInfo[[i]][3]
-          height = (grobInfo[[i]][4] - grobInfo[[i]][3])
-          # x = grobInfo[[i]][1]/ncol
-          # width = (grobInfo[[i]][2] - grobInfo[[i]][1])/ncol
-          # y = grobInfo[[i]][3]/nrow
-          # height = (grobInfo[[i]][4] - grobInfo[[i]][3])/nrow
+          # x = grobInfo[[i]][1]
+          # width = (grobInfo[[i]][2] - grobInfo[[i]][1])
+          # y = grobInfo[[i]][3]
+          # height = (grobInfo[[i]][4] - grobInfo[[i]][3])
+          x = grobInfo[[i]][1]/ncol
+          width = (grobInfo[[i]][2] - grobInfo[[i]][1])/ncol
+          y = grobInfo[[i]][3]/nrow
+          height = (grobInfo[[i]][4] - grobInfo[[i]][3])/nrow
           name = paste0("x.", nameFour(x,r), ".", cnt, ".",
                         attr(grobInfo[[i]],"name"),".alignment")
           grid.rect(x = x, y = y, width = width, height = height,
@@ -149,12 +150,12 @@ drawMatch <- function(matchInfo, grobInfo, item, r, align, RandC) {
                     name = name, vp=cvp)
           cnt = cnt + 1
         }
-        grid.lines(x = matchInfo$x[index], default.units = "in",
-                   gp = gpar(col = "blue"), vp=cvp,
-                   name = paste0("x.", nameFour(matchInfo$x[index],r), ".alignment"))
-        # grid.lines(x = matchInfo$x[index]/ncol, default.units = "in",
+        # grid.lines(x = matchInfo$x[index], default.units = "in",
         #            gp = gpar(col = "blue"), vp=cvp,
         #            name = paste0("x.", nameFour(matchInfo$x[index],r), ".alignment"))
+        grid.lines(x = matchInfo$x[index]/ncol, default.units = "in",
+                   gp = gpar(col = "blue"), vp=cvp,
+                   name = paste0("x.", nameFour(matchInfo$x[index],r), ".alignment"))
       }
     }
   }
@@ -172,7 +173,6 @@ drawMatch <- function(matchInfo, grobInfo, item, r, align, RandC) {
         ccol <- j %% ncol
         ccol[ccol == 0] <- ncol
         cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
-        grid.rect(vp=cvp)
         print(g, vp=cvp)
         j = j + 1
         for (i in matchInfo$yAlignment[[index]]) {
@@ -182,14 +182,14 @@ drawMatch <- function(matchInfo, grobInfo, item, r, align, RandC) {
             lty = 1
             matches[which(item==tmp)] <- TRUE
           }
-          x = grobInfo[[i]][1]
-          width = (grobInfo[[i]][2] - grobInfo[[i]][1])
-          y = grobInfo[[i]][3]
-          height = (grobInfo[[i]][4] - grobInfo[[i]][3])
-          # x = grobInfo[[i]][1]/ncol
-          # width = (grobInfo[[i]][2] - grobInfo[[i]][1])/ncol
-          # y = grobInfo[[i]][3]/nrow
-          # height = (grobInfo[[i]][4] - grobInfo[[i]][3])/nrow
+          # x = grobInfo[[i]][1]
+          # width = (grobInfo[[i]][2] - grobInfo[[i]][1])
+          # y = grobInfo[[i]][3]
+          # height = (grobInfo[[i]][4] - grobInfo[[i]][3])
+          x = grobInfo[[i]][1]/ncol
+          width = (grobInfo[[i]][2] - grobInfo[[i]][1])/ncol
+          y = grobInfo[[i]][3]/nrow
+          height = (grobInfo[[i]][4] - grobInfo[[i]][3])/nrow
           name = paste0("y.", nameFour(y,r), ".", cnt, ".",
                         attr(grobInfo[[i]],"name"),".alignment")
           grid.rect(x = x, y = y, width = width, height = height,
@@ -198,12 +198,12 @@ drawMatch <- function(matchInfo, grobInfo, item, r, align, RandC) {
                     name = name, vp=cvp)
           cnt = cnt + 1
         }
-        grid.lines(y = matchInfo$y[index], default.units = "in",
-                   gp = gpar(col = "blue"), vp=cvp,
-                   name = paste0("y.", nameFour(matchInfo$y[index],r), ".alignment"))
-        # grid.lines(y = matchInfo$y[index]/nrow, default.units = "in",
+        # grid.lines(y = matchInfo$y[index], default.units = "in",
         #            gp = gpar(col = "blue"), vp=cvp,
         #            name = paste0("y.", nameFour(matchInfo$y[index],r), ".alignment"))
+        grid.lines(y = matchInfo$y[index]/nrow, default.units = "in",
+                   gp = gpar(col = "blue"), vp=cvp,
+                   name = paste0("y.", nameFour(matchInfo$y[index],r), ".alignment"))
       }
     }
   }

@@ -12,7 +12,7 @@ calcInfo <- function(listing, separateText, rounding=4) {
 
 
 #' @importFrom drawGrob
-drawAlignment <- function(listing, info, show = "both", align = "b",
+drawAlignment <- function(g, listing, info, show = "both", align = "b",
                           include=".", exclude=NULL, rounding=4) {
   grobInfoF <- info$grobInfo
   if (length(include))
@@ -32,26 +32,26 @@ drawAlignment <- function(listing, info, show = "both", align = "b",
     # }
     png("plot2.png")
     RandC <- countFacets(info$matchInfo, info$grobInfo, item, rounding, align)
-    res <- drawMatch(info$matchInfo, info$grobInfo, item, rounding, align, RandC)
+    res <- drawMatch(g, info$matchInfo, info$grobInfo, item, rounding, align, RandC)
     table(res)
     dev.off()
   }
 }
 
 
-checkAndDraw <- function(show, align, include, exclude, separateText, rounding) {
+checkAndDraw <- function(g, show, align, include, exclude, separateText, rounding) {
   listing <- do.call(cbind, grid.ls(view=TRUE))
   info <- calcInfo(listing, separateText, rounding)
   rounding <- attr(info, "rounding")
-  drawAlignment(listing, info, show, align,
+  drawAlignment(g, listing, info, show, align,
                 include, exclude, rounding)
   p1 <- readPNG("plot1.png")
   p2 <- readPNG("plot2.png")
   grid.newpage()
-  pushViewport(viewport(x=0, width=.5, just="left"))
-  grid.raster(p1)
-  popViewport()
-  pushViewport(viewport(x=.5, width=.5, just="left"))
+  #pushViewport(viewport(x=0, width=.5, just="left"))
+  #grid.raster(p1)
+  #popViewport()
+  #pushViewport(viewport(x=.5, width=.5, just="left"))
   grid.raster(p2)
-  popViewport()
+  #popViewport()
 }
