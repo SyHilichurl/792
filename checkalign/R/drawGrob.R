@@ -75,7 +75,7 @@ countFacets <- function(matchInfo, grobInfo, item, r, align) {
       }
     }
   }
-  if (align=="b" | align=="v") {
+  if (align=="b" | align=="h") {
     for (index in seq_along(matchInfo$y)) {
       flag = FALSE
       for (i in matchInfo$yAlignment[[index]])
@@ -95,21 +95,32 @@ countFacets <- function(matchInfo, grobInfo, item, r, align) {
   c(nrow, ncol)
 }
 
-
+#' @importFrom plot2png
 drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
-  # findMatch <- function(item) {
-  #   sapply(grid.grep(item, grep = TRUE, global = TRUE), as.character)
-  # }
-  # matches <- unlist(lapply(item, findMatch))
   nrow <- RandC[1]
   ncol <- RandC[2]
-  # vps <- viewport(width = ncol*grobInfo[[1]]["right"], height = nrow*grobInfo[[1]]["top"],
-  #                 default.units = "inch",
-  #                 layout = grid.layout(nrow, ncol))
-  vps <- viewport(layout = grid.layout(nrow, ncol))
+  if (nrow*ncol > 25 | nrow*ncol == 0) {  # if too many facets
+    nrow <- 1
+    ncol <- 1
+    cvp <- viewport(width = grobInfo[[1]]["right"], height = grobInfo[[1]]["top"],
+                    default.units = "inch")
+    print(g)
+  }
+  vps <- viewport(width = grobInfo[[1]]["right"], height = grobInfo[[1]]["top"],
+                  default.units = "inch",
+                  layout = grid.layout(nrow, ncol))
+  #vps <- viewport(layout = grid.layout(nrow, ncol))
   pushViewport(vps)
+  # cvp = viewport(layout.pos.row = 1, layout.pos.col = 1)
+  # vp_width <- convertWidth(unit(cvp$width, "mm"), "in", valueOnly = TRUE)
+  # vp_height <- convertHeight(unit(cvp$height, "mm"), "in", valueOnly = TRUE)
+  # cat(vp_width,vp_height)
+  # img0 <- plot2png(g, vp_width, vp_height)
+  # upViewport(0)
+  # pushViewport(vps)
   j = 1
 
+  #png("plot2.png")
   matches <- logical(length(item))
   if (align=="b" | align=="v") {
     for (index in seq_along(matchInfo$x)) {
@@ -121,12 +132,22 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
           break
         }
       if (flag) {
-        crow <- ceiling(j / ncol)
-        ccol <- j %% ncol
-        ccol[ccol == 0] <- ncol
-        cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
-        print(g, vp=cvp)
-        j = j + 1
+        if (nrow*ncol != 1) {
+          crow <- ceiling(j / ncol)
+          ccol <- j %% ncol
+          ccol[ccol == 0] <- ncol
+          cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
+          vp_width <- convertWidth(unit(cvp$width, "mm"), "in", valueOnly = TRUE)
+          vp_height <- convertHeight(unit(cvp$height, "mm"), "in", valueOnly = TRUE)
+          #ggsave("plot0.png", plot = g, width = vp_width, height = vp_height, units = "in")
+          # trellis.device(png, file = "plot0.png", width = vp_width, height = vp_height, units = "in",res=300)
+          # print(g)
+          # dev.off()
+          # img0 <- readPNG("plot0.png")
+          img0 <- plot2png(g, vp_width, vp_height)
+          grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
+          j = j + 1
+        }
         for (i in matchInfo$xAlignment[[index]]) {
           lty = 3
           tmp <- attr(grobInfo[[i]], "name")
@@ -134,10 +155,6 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
             lty = 1
             matches[which(item==tmp)] <- TRUE
           }
-          # x = grobInfo[[i]][1]
-          # width = (grobInfo[[i]][2] - grobInfo[[i]][1])
-          # y = grobInfo[[i]][3]
-          # height = (grobInfo[[i]][4] - grobInfo[[i]][3])
           x = grobInfo[[i]][1]/ncol
           width = (grobInfo[[i]][2] - grobInfo[[i]][1])/ncol
           y = grobInfo[[i]][3]/nrow
@@ -150,16 +167,13 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
                     name = name, vp=cvp)
           cnt = cnt + 1
         }
-        # grid.lines(x = matchInfo$x[index], default.units = "in",
-        #            gp = gpar(col = "blue"), vp=cvp,
-        #            name = paste0("x.", nameFour(matchInfo$x[index],r), ".alignment"))
         grid.lines(x = matchInfo$x[index]/ncol, default.units = "in",
                    gp = gpar(col = "blue"), vp=cvp,
                    name = paste0("x.", nameFour(matchInfo$x[index],r), ".alignment"))
       }
     }
   }
-  if (align=="b" | align=="v") {
+  if (align=="b" | align=="h") {
     for (index in seq_along(matchInfo$y)) {
       flag = FALSE
       cnt = 1
@@ -169,12 +183,23 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
           break
         }
       if (flag) {
-        crow <- ceiling(j / ncol)
-        ccol <- j %% ncol
-        ccol[ccol == 0] <- ncol
-        cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
-        print(g, vp=cvp)
-        j = j + 1
+        if (nrow*ncol != 1) {
+          crow <- ceiling(j / ncol)
+          ccol <- j %% ncol
+          ccol[ccol == 0] <- ncol
+          cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
+          vp_width <- convertWidth(unit(cvp$width, "mm"), "in", valueOnly = TRUE)
+          vp_height <- convertHeight(unit(cvp$height, "mm"), "in", valueOnly = TRUE)
+          #ggsave("plot0.png", plot = g, width = vp_width, height = vp_height, units = "in")
+          # trellis.device(png, file = "plot0.png", width = vp_width, height = vp_height, units = "in",res=300)
+          # print(g)
+          # dev.off()
+          # img0 <- readPNG("plot0.png")
+          img0 <- plot2png(g, vp_width, vp_height)
+          grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
+          #unlink("plot0.png")
+          j = j + 1
+        }
         for (i in matchInfo$yAlignment[[index]]) {
           lty = 3
           tmp <- attr(grobInfo[[i]], "name")
@@ -182,10 +207,6 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
             lty = 1
             matches[which(item==tmp)] <- TRUE
           }
-          # x = grobInfo[[i]][1]
-          # width = (grobInfo[[i]][2] - grobInfo[[i]][1])
-          # y = grobInfo[[i]][3]
-          # height = (grobInfo[[i]][4] - grobInfo[[i]][3])
           x = grobInfo[[i]][1]/ncol
           width = (grobInfo[[i]][2] - grobInfo[[i]][1])/ncol
           y = grobInfo[[i]][3]/nrow
@@ -198,16 +219,14 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
                     name = name, vp=cvp)
           cnt = cnt + 1
         }
-        # grid.lines(y = matchInfo$y[index], default.units = "in",
-        #            gp = gpar(col = "blue"), vp=cvp,
-        #            name = paste0("y.", nameFour(matchInfo$y[index],r), ".alignment"))
         grid.lines(y = matchInfo$y[index]/nrow, default.units = "in",
                    gp = gpar(col = "blue"), vp=cvp,
                    name = paste0("y.", nameFour(matchInfo$y[index],r), ".alignment"))
       }
     }
   }
-  upViewport()
+  upViewport(0)
+  #dev.off()
   if (length(item[matches])>0)
     cat("\nAligned!!\n")
   for (i in seq_along(item[matches]))

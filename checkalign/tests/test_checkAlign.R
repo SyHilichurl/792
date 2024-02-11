@@ -27,26 +27,41 @@ checkalign3 <- function() {
   } else {
     cat("The example requires 'ggplot2' which is not installed.")
   }
-  checkAlignment(g2, rounding=3, show = "aligned", align=0)
+  res <- checkAlignment(g, rounding=3, show = "aligned", align="v")
+  cat(res)
 }
 
-checkalign4 <- funtion() {
-  a <- xyplot(mpg ~ disp | vs, data = mtcars, type = "p", main = "Scatterplot Example")
-  checkAlignment(a, exclude="background",
-                 include = c("lab", "textl"), rounding=2)
+checkalign4 <- function() {
+  if (require(ggplot2)) {
+    g <- ggplot(mtcars) + geom_point(aes(disp, mpg))
+  } else {
+    cat("The example requires 'ggplot2' which is not installed.")
+  }
+  res <- checkAlignment(g, rounding=3, show = "aligned", align="b")
+  cat(res)
 }
 
 checkalign5 <- function() {
+  if (require(lattice)) {
+    g <- xyplot(mpg ~ disp | vs, data = mtcars, type = "p", main = "Scatterplot Example")
+  } else {
+    cat("The example requires 'lattice' which is not installed.")
+  }
+  checkAlignment(g, exclude="background",
+                 include = c("lab", "textl"), rounding=2)
+}
+
+checkalign6 <- function() {
   x <- function() plot(mtcars$mpg, mtcars$vs)
   checkAlignment(x, include="axis")
 }
 
-checkalign6 <- function() {
+checkalign7 <- function() {
   x1 <- function() print("yes")
   checkAlignment(x1, include="axis")
 }
 
-checkalign7 <- funtion() {
+checkalign8 <- function() {
   plot(mtcars$mpg, mtcars$disp)
   y <- recordPlot()
   replayPlot(y)

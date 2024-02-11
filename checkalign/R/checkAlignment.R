@@ -17,7 +17,7 @@
 #' Possible values are "both", "unaligned", and "aligned".
 #' @param align
 #' A numeric value indicating which hints of aligned elements to be shown.
-#' v means vertical alignments, h means horizontal alignments and default value b
+#' "v" means vertical alignments, "h" means horizontal alignments and default value "b"
 #' means both.
 #' @param include
 #' A character value or vector indicating which kind of elements will be checked.
@@ -63,27 +63,29 @@ checkAlignment.ggplot <- function(g, show = "both", align="b",
 }
 
 #' @export
-checkAlignment.trellis <- function(x, show = "both", align="b",
+checkAlignment.trellis <- function(g, show = "both", align="b",
                                    include=".", exclude=NULL,
                                    separateText = TRUE, rounding=4) {
-  print(x)
-  checkAndDraw(show, align, include, exclude, separateText, rounding)
+  png("plot1.png")
+  print(g)
+  checkAndDraw(g, show, align, include, exclude, separateText, rounding)
 }
 
 #' @export
-checkAlignment.function <- function(x, show = "both", align="b",
+checkAlignment.function <- function(g, show = "both", align="b",
                                     include=".", exclude=NULL,
                                     separateText = TRUE, rounding=4) {
+  png("plot1.png")
   grid.newpage()
-  print(gridGraphics::grid.echo(x))
-  checkAndDraw(show, align, include, exclude, separateText, rounding)
+  print(gridGraphics::grid.echo(g))
+  checkAndDraw(g, show, align, include, exclude, separateText, rounding)
 }
 
 #' @export
-checkAlignment.recordedplot <- function(x, show = "both", align="b",
+checkAlignment.recordedplot <- function(g, show = "both", align="b",
                                         include=".", exclude=NULL,
                                         separateText = TRUE, rounding=4) {
-  replayPlot(x)
+  replayPlot(g)
   gridGraphics::grid.echo()
-  checkAndDraw(show, align, include, exclude, separateText, rounding)
+  checkAndDraw(g, show, align, include, exclude, separateText, rounding)
 }

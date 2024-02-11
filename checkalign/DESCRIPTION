@@ -8,8 +8,8 @@ Authors@R: c(person("Shiyi", "Developer", role = c("aut", "cre"),
 Author: Shiyi Developer [aut, cre],
   Paul [ctb]
 Maintainer: Shiyi Developer <sche753@aucklanduni.ac.nz>
-Depends: R (>= 4.2.1), grid
-Imports: grid
+Depends: R (>= 4.2.1), grid, png
+Imports: grid, png
 Suggests: ggplot2, lattice, girdGraphics
 Description: Check if graphics follow some design principles
 License: GPL (>= 3)

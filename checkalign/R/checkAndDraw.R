@@ -27,9 +27,6 @@ drawAlignment <- function(g, listing, info, show = "both", align = "b",
     dev.off()
   }
   if(show == "aligned" | show == "both") {
-    #   drawSameSide(info$boundsInfo) # e.g. left & left
-    #   drawDiffSide(info$boundsInfo) # e.g. left & right
-    # }
     png("plot2.png")
     RandC <- countFacets(info$matchInfo, info$grobInfo, item, rounding, align)
     res <- drawMatch(g, info$matchInfo, info$grobInfo, item, rounding, align, RandC)
@@ -45,13 +42,23 @@ checkAndDraw <- function(g, show, align, include, exclude, separateText, roundin
   rounding <- attr(info, "rounding")
   drawAlignment(g, listing, info, show, align,
                 include, exclude, rounding)
-  p1 <- readPNG("plot1.png")
-  p2 <- readPNG("plot2.png")
   grid.newpage()
-  #pushViewport(viewport(x=0, width=.5, just="left"))
-  #grid.raster(p1)
-  #popViewport()
-  #pushViewport(viewport(x=.5, width=.5, just="left"))
-  grid.raster(p2)
-  #popViewport()
+  if (show == "unaligned") {
+    p1 <- readPNG("plot1.png")
+    grid.raster(p1)
+  } else if (show == "aligned") {
+    p2 <- readPNG("plot2.png")
+    grid.raster(p2)
+  } else {
+    p1 <- readPNG("plot1.png")
+    p2 <- readPNG("plot2.png")
+    pushViewport(viewport(x=0, width=.5, just="left"))
+    grid.raster(p1)
+    popViewport()
+    pushViewport(viewport(x=.5, width=.5, just="left"))
+    grid.raster(p2)
+    popViewport()
+  }
+  unlink("plot1.png")
+  unlink("plot2.png")
 }
