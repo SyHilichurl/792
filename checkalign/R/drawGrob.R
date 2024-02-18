@@ -1,22 +1,26 @@
 excludeGrob <- function(grobInfo, exclude) {
-  findMatch <- function(exclude) {
-    sapply(grid.grep(exclude, grep = TRUE, global = TRUE), as.character)
-  }
-  matches <- unlist(lapply(exclude, findMatch))
+  # findMatch <- function(exclude) {
+  #   sapply(grid.grep(exclude, grep = TRUE, global = TRUE), as.character)
+  # }
+  # matches <- unlist(lapply(exclude, findMatch))
+  exclude <- paste(exclude, collapse = "|")
   findGrob <- function(g) {
-    !attr(g, "name") %in% matches
+    # !attr(g, "name") %in% matches
+    !grepl(exclude, attr(g, "name"))
   }
   Filter(findGrob, grobInfo)
 }
 
 
 includeGrob <- function(grobInfo, include) {
-  findMatch <- function(include) {
-    sapply(grid.grep(include, grep = TRUE, global = TRUE), as.character)
-  }
-  matches <- unlist(lapply(include, findMatch))
+  # findMatch <- function(include) {
+  #   sapply(grid.grep(include, grep = TRUE, global = TRUE), as.character)
+  # }
+  # matches <- unlist(lapply(include, findMatch))
+  include <- paste(include, collapse = "|")
   findGrob <- function(g) {
-    attr(g, "name") %in% matches
+    # attr(g, "name") %in% matches
+    grepl(include, attr(g, "name"))
   }
   Filter(findGrob, grobInfo)
 }
@@ -36,14 +40,17 @@ editGrobIndex <- function(gPath, vPath, index, len) {
 }
 
 
-drawNotAligned <- function(notAlignInfo, listing, item) {
+drawNotAligned <- function(notAlignInfo, listing, listing_new, item) {
   if (length(notAlignInfo) != 0) {
     cat("\nNot Aligned!!\n")
     for (i in 1:(length(notAlignInfo)/3)) {
       gPath <- gPath(listing[notAlignInfo[1, i], "gPath"],
                      listing[notAlignInfo[1, i], "name"])
-      vPath <- listing[notAlignInfo[1, i], "vpPath"]
+      #vPath <- listing[notAlignInfo[1, i], "vpPath"]
       if (as.character(gPath) %in% item) {
+        gPath <- gPath(listing_new[notAlignInfo[1, i], "gPath"],
+                       listing_new[notAlignInfo[1, i], "name"])
+        vPath <- listing_new[notAlignInfo[1, i], "vpPath"]
         cat(as.character(gPath), "-", notAlignInfo[2, i], "\n")
         editGrobIndex(gPath, vPath, notAlignInfo[2, i], notAlignInfo[3, i])
       }
@@ -95,32 +102,23 @@ countFacets <- function(matchInfo, grobInfo, item, r, align) {
   c(nrow, ncol)
 }
 
-#' @importFrom plot2png
-drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
+#' @importFrom g2png
+drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, showInOne) {
   nrow <- RandC[1]
   ncol <- RandC[2]
-  if (nrow*ncol > 25 | nrow*ncol == 0) {  # if too many facets
+  if (nrow*ncol > 25 | nrow*ncol == 0 | showInOne) {  # if too many facets
     nrow <- 1
     ncol <- 1
     cvp <- viewport(width = grobInfo[[1]]["right"], height = grobInfo[[1]]["top"],
                     default.units = "inch")
-    print(g)
+    g2plot(g)
   }
-  vps <- viewport(width = grobInfo[[1]]["right"], height = grobInfo[[1]]["top"],
-                  default.units = "inch",
-                  layout = grid.layout(nrow, ncol))
-  #vps <- viewport(layout = grid.layout(nrow, ncol))
+  vps <- viewport(layout = grid.layout(nrow, ncol))
+  img0 <- readPNG("plot0.png")
+  unlink("plot0.png")
   pushViewport(vps)
-  # cvp = viewport(layout.pos.row = 1, layout.pos.col = 1)
-  # vp_width <- convertWidth(unit(cvp$width, "mm"), "in", valueOnly = TRUE)
-  # vp_height <- convertHeight(unit(cvp$height, "mm"), "in", valueOnly = TRUE)
-  # cat(vp_width,vp_height)
-  # img0 <- plot2png(g, vp_width, vp_height)
-  # upViewport(0)
-  # pushViewport(vps)
   j = 1
 
-  #png("plot2.png")
   matches <- logical(length(item))
   if (align=="b" | align=="v") {
     for (index in seq_along(matchInfo$x)) {
@@ -137,14 +135,6 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
           ccol <- j %% ncol
           ccol[ccol == 0] <- ncol
           cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
-          vp_width <- convertWidth(unit(cvp$width, "mm"), "in", valueOnly = TRUE)
-          vp_height <- convertHeight(unit(cvp$height, "mm"), "in", valueOnly = TRUE)
-          #ggsave("plot0.png", plot = g, width = vp_width, height = vp_height, units = "in")
-          # trellis.device(png, file = "plot0.png", width = vp_width, height = vp_height, units = "in",res=300)
-          # print(g)
-          # dev.off()
-          # img0 <- readPNG("plot0.png")
-          img0 <- plot2png(g, vp_width, vp_height)
           grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
           j = j + 1
         }
@@ -190,14 +180,7 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
           cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
           vp_width <- convertWidth(unit(cvp$width, "mm"), "in", valueOnly = TRUE)
           vp_height <- convertHeight(unit(cvp$height, "mm"), "in", valueOnly = TRUE)
-          #ggsave("plot0.png", plot = g, width = vp_width, height = vp_height, units = "in")
-          # trellis.device(png, file = "plot0.png", width = vp_width, height = vp_height, units = "in",res=300)
-          # print(g)
-          # dev.off()
-          # img0 <- readPNG("plot0.png")
-          img0 <- plot2png(g, vp_width, vp_height)
           grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
-          #unlink("plot0.png")
           j = j + 1
         }
         for (i in matchInfo$yAlignment[[index]]) {
@@ -226,7 +209,6 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC) {
     }
   }
   upViewport(0)
-  #dev.off()
   if (length(item[matches])>0)
     cat("\nAligned!!\n")
   for (i in seq_along(item[matches]))

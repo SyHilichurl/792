@@ -12,46 +12,52 @@ calcInfo <- function(listing, separateText, rounding=4) {
 
 
 #' @importFrom drawGrob
-drawAlignment <- function(g, listing, info, show = "both", align = "b",
-                          include=".", exclude=NULL, rounding=4) {
+#' @importFrom g2png
+drawAlignment <- function(g, listing, info, show = "both", showInOne=FALSE,
+                          align = "b", include=".", exclude=NULL, rounding=4) {
   grobInfoF <- info$grobInfo
   if (length(include))
     grobInfoF <- includeGrob(grobInfoF, include)
   if (length(exclude))
     grobInfoF <- excludeGrob(grobInfoF, exclude)
   item <- sapply(grobInfoF, function(x) attr(x, "name"))
-
+  res <- 0
   grid.rect(gp = gpar(fill = rgb(1,1,1,0.7), col=NA), name = "shade.highlight")
   if(show == "unaligned" | show == "both") {
-    drawNotAligned(info$notAlignInfo, listing, item)
+    png("plot_unaligned.png", width=400, height=400)
+    g2plot(g)
+    listing_new <- do.call(cbind, grid.ls(view=TRUE))
+    drawNotAligned(info$notAlignInfo, listing, listing_new, item)
     dev.off()
   }
   if(show == "aligned" | show == "both") {
-    png("plot2.png")
+    png("plot_aligned.png", width=400, height=400)
     RandC <- countFacets(info$matchInfo, info$grobInfo, item, rounding, align)
-    res <- drawMatch(g, info$matchInfo, info$grobInfo, item, rounding, align, RandC)
-    table(res)
+    res <- drawMatch(g, info$matchInfo, info$grobInfo, item, rounding, align, RandC, showInOne)
     dev.off()
   }
+  table(res)
 }
 
 
-checkAndDraw <- function(g, show, align, include, exclude, separateText, rounding) {
+checkAndDraw <- function(g, show, showInOne, align, include, exclude,
+                         separateText, rounding) {
   listing <- do.call(cbind, grid.ls(view=TRUE))
   info <- calcInfo(listing, separateText, rounding)
+  dev.off()
   rounding <- attr(info, "rounding")
-  drawAlignment(g, listing, info, show, align,
+  res <- drawAlignment(g, listing, info, show, showInOne, align,
                 include, exclude, rounding)
   grid.newpage()
   if (show == "unaligned") {
-    p1 <- readPNG("plot1.png")
+    p1 <- readPNG("plot_unaligned.png")
     grid.raster(p1)
   } else if (show == "aligned") {
-    p2 <- readPNG("plot2.png")
+    p2 <- readPNG("plot_aligned.png")
     grid.raster(p2)
   } else {
-    p1 <- readPNG("plot1.png")
-    p2 <- readPNG("plot2.png")
+    p1 <- readPNG("plot_unaligned.png")
+    p2 <- readPNG("plot_aligned.png")
     pushViewport(viewport(x=0, width=.5, just="left"))
     grid.raster(p1)
     popViewport()
@@ -59,6 +65,7 @@ checkAndDraw <- function(g, show, align, include, exclude, separateText, roundin
     grid.raster(p2)
     popViewport()
   }
-  unlink("plot1.png")
-  unlink("plot2.png")
+  unlink("plot_unaligned.png")
+  unlink("plot_aligned.png")
+  res
 }

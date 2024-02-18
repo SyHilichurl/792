@@ -15,6 +15,10 @@
 #' @param show
 #' A character value indicating which hints to be shown.
 #' Possible values are "both", "unaligned", and "aligned".
+#' @param showInOne
+#' A logic value indicating whether the plot showing aligned elements to be shown in facets.
+#' If "TRUE", all the subplots will be shown in one.
+#' Default value is "FALSE". If "FALSE", all the subplots (no more than 25) will be shown in facets.
 #' @param align
 #' A numeric value indicating which hints of aligned elements to be shown.
 #' "v" means vertical alignments, "h" means horizontal alignments and default value "b"
@@ -32,10 +36,11 @@
 #' @param rounding
 #' A numeric value indicating the decimal point precision used in checking.
 #'
-#' @return A table to show the aligned elements.
+#' @return A table to show the number of each aligned element's pairs.
 #' @export
 #'
 #' @importFrom checkAndDraw
+#' @importFrom g2plot
 #' @seealso  \code{\link[grid]{grid.ls}}
 #' @examples \dontrun{
 #'   if (require(ggplot2)) {
@@ -46,46 +51,50 @@
 #'     warning("The example requires 'ggplot2' which is not installed.")
 #'   }
 #' }
-checkAlignment <- function(x, show = "both", align="b",
-                           include=".", exclude=NULL,
-                           separateText = TRUE, rounding) {
+checkAlignment <- function(g, show = "both", showInOne = FALSE,
+                           align="b", include=".", exclude=NULL,
+                           separateText = TRUE, rounding=4) {
   UseMethod("checkAlignment")
 }
 
 #' @export
-checkAlignment.ggplot <- function(g, show = "both", align="b",
-                                  include=".", exclude=NULL,
+checkAlignment.ggplot <- function(g, show = "both", showInOne = FALSE,
+                                  align="b", include=".", exclude=NULL,
                                   separateText = TRUE, rounding=4) {
-  png("plot1.png")
-  print(g)
-  grid.force()
-  checkAndDraw(g, show, align, include, exclude, separateText, rounding)
+  png("plot0.png", width=400, height=400)
+  #print(g)
+  #grid.force()
+  g2plot(g)
+  checkAndDraw(g, show, showInOne, align, include, exclude, separateText, rounding)
 }
 
 #' @export
-checkAlignment.trellis <- function(g, show = "both", align="b",
-                                   include=".", exclude=NULL,
+checkAlignment.trellis <- function(g, show = "both", showInOne = FALSE,
+                                   align="b", include=".", exclude=NULL,
                                    separateText = TRUE, rounding=4) {
-  png("plot1.png")
-  print(g)
-  checkAndDraw(g, show, align, include, exclude, separateText, rounding)
+  png("plot0.png", width=400, height=400)
+  #print(g)
+  g2plot(g)
+  checkAndDraw(g, show, showInOne, align, include, exclude, separateText, rounding)
 }
 
 #' @export
-checkAlignment.function <- function(g, show = "both", align="b",
-                                    include=".", exclude=NULL,
+checkAlignment.function <- function(g, show = "both", showInOne = FALSE,
+                                    align="b", include=".", exclude=NULL,
                                     separateText = TRUE, rounding=4) {
-  png("plot1.png")
-  grid.newpage()
-  print(gridGraphics::grid.echo(g))
-  checkAndDraw(g, show, align, include, exclude, separateText, rounding)
+  png("plot0.png", width=400, height=400)
+  # grid.newpage()
+  # print(gridGraphics::grid.echo(g))
+  g2plot(g)
+  checkAndDraw(g, show, showInOne, align, include, exclude, separateText, rounding)
 }
 
 #' @export
-checkAlignment.recordedplot <- function(g, show = "both", align="b",
-                                        include=".", exclude=NULL,
+checkAlignment.recordedplot <- function(g, show = "both", showInOne = FALSE,
+                                        align="b", include=".", exclude=NULL,
                                         separateText = TRUE, rounding=4) {
+  png("plot0.png", width=400, height=400)
   replayPlot(g)
   gridGraphics::grid.echo()
-  checkAndDraw(g, show, align, include, exclude, separateText, rounding)
+  checkAndDraw(g, show, showInOne, align, include, exclude, separateText, rounding)
 }

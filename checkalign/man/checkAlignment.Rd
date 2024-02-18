@@ -4,17 +4,19 @@
 \alias{checkAlignment}
 \title{checkAlignment}
 \usage{
-checkAlignment(g, show = "both", align=.5,
+checkAlignment(g, show = "both", align="b",
 include=".", exclude=NULL, separateText = TRUE, rounding=4)
 }
 \arguments{
-\item{x}{A graphic value (e.g. a ggplot)}
-
 \item{show}{A character value indicating which hints to be shown.
 Possible values are "both", "unaligned", and "aligned".}
 
+\item{showInOne}{A logic value indicating whether the plot showing aligned elements to be shown in facets.
+If "TRUE", all the subplots will be shown in one.
+Default value is "FALSE". If "FALSE", all the subplots (no more than 25) will be shown in facets.}
+
 \item{align}{A numeric value indicating which hints of aligned elements to be shown.
-0 means vertical alignments, 1 means horizontal alignments and default value 0.5
+"v" means vertical alignments, "h" means horizontal alignments and default value "b"
 means both.}
 
 \item{include}{A character value or vector indicating which kind of elements will be checked.
@@ -28,9 +30,11 @@ If "TRUE", all the element in a textgrob will be regarded as different elements.
 If "FALSE", all the element in a textgrob will be regarded as a unity.}
 
 \item{rounding}{A numeric value indicating the decimal point precision used in checking.}
+
+\item{x}{A graphic value (e.g. a ggplot)}
 }
 \value{
-A table to show the aligned elements.
+A table to show the number of each aligned element's pairs.
 }
 \description{
 Check if the arrangement of elements follows the design principle of alignment,
