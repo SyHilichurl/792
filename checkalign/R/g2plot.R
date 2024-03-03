@@ -13,10 +13,21 @@ g2plot.trellis <- function(g) {
 
 g2plot.function <- function(g) {
   grid.newpage()
-  print(gridGraphics::grid.echo(g))
+  tryCatch(
+    {gridGraphics::grid.echo(g)},
+    warning = function(w) {
+      if (grepl("No graphics to replay", w)) {
+        dev.off()
+        unlink("plot0.png")
+        stop("Make sure the function is a plot\n.")
+      }
+    })
 }
 
+
 g2plot.recordedplot <- function(g) {
+  dev.control("enable")
   replayPlot(g)
   gridGraphics::grid.echo()
 }
+

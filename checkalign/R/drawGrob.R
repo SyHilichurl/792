@@ -41,8 +41,11 @@ editGrobIndex <- function(gPath, vPath, index, len) {
 
 
 drawNotAligned <- function(notAlignInfo, listing, listing_new, item) {
+  res <- 0
   if (length(notAlignInfo) != 0) {
     cat("\nNot Aligned!!\n")
+    res <- character(length(notAlignInfo)/3)
+    k <- 0
     for (i in 1:(length(notAlignInfo)/3)) {
       gPath <- gPath(listing[notAlignInfo[1, i], "gPath"],
                      listing[notAlignInfo[1, i], "name"])
@@ -51,11 +54,14 @@ drawNotAligned <- function(notAlignInfo, listing, listing_new, item) {
         gPath <- gPath(listing_new[notAlignInfo[1, i], "gPath"],
                        listing_new[notAlignInfo[1, i], "name"])
         vPath <- listing_new[notAlignInfo[1, i], "vpPath"]
-        cat(as.character(gPath), "-", notAlignInfo[2, i], "\n")
+        k <- k + 1
+        res[k] <- paste(as.character(gPath), "-", notAlignInfo[2, i])
+        cat(res[k], "\n")
         editGrobIndex(gPath, vPath, notAlignInfo[2, i], notAlignInfo[3, i])
       }
     }
   }
+  res[1:k]
 }
 
 
@@ -102,7 +108,7 @@ countFacets <- function(matchInfo, grobInfo, item, r, align) {
   c(nrow, ncol)
 }
 
-#' @importFrom g2png
+
 drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, showInOne) {
   nrow <- RandC[1]
   ncol <- RandC[2]

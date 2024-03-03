@@ -1,4 +1,3 @@
-#' @importFrom textCoords
 getGrobInfo <- function(listing, separateText) {
   # output: l,r,b,t,index1,index2,len
   # the index2 in len shape of the index1 grob in the listing

@@ -1,4 +1,3 @@
-#' @importFrom getInfo
 calcInfo <- function(listing, separateText, rounding=4) {
   grobInfo <- getGrobInfo(listing, separateText)
   boundsInfo <- getBoundsInfo(grobInfo, rounding)
@@ -11,8 +10,6 @@ calcInfo <- function(listing, separateText, rounding=4) {
 }
 
 
-#' @importFrom drawGrob
-#' @importFrom g2png
 drawAlignment <- function(g, listing, info, show = "both", showInOne=FALSE,
                           align = "b", include=".", exclude=NULL, rounding=4) {
   grobInfoF <- info$grobInfo
@@ -21,22 +18,23 @@ drawAlignment <- function(g, listing, info, show = "both", showInOne=FALSE,
   if (length(exclude))
     grobInfoF <- excludeGrob(grobInfoF, exclude)
   item <- sapply(grobInfoF, function(x) attr(x, "name"))
-  res <- 0
-  grid.rect(gp = gpar(fill = rgb(1,1,1,0.7), col=NA), name = "shade.highlight")
+  res1 <- 0
+  res2 <- 0
   if(show == "unaligned" | show == "both") {
     png("plot_unaligned.png", width=400, height=400)
     g2plot(g)
     listing_new <- do.call(cbind, grid.ls(view=TRUE))
-    drawNotAligned(info$notAlignInfo, listing, listing_new, item)
+    grid.rect(gp = gpar(fill = rgb(1,1,1,0.7), col=NA), name = "shade.highlight")
+    res1 <- drawNotAligned(info$notAlignInfo, listing, listing_new, item)
     dev.off()
   }
   if(show == "aligned" | show == "both") {
     png("plot_aligned.png", width=400, height=400)
     RandC <- countFacets(info$matchInfo, info$grobInfo, item, rounding, align)
-    res <- drawMatch(g, info$matchInfo, info$grobInfo, item, rounding, align, RandC, showInOne)
+    res2 <- drawMatch(g, info$matchInfo, info$grobInfo, item, rounding, align, RandC, showInOne)
     dev.off()
   }
-  table(res)
+  list("unaligned" = res1, "aligned" = as.list(table(res2)))
 }
 
 

@@ -39,8 +39,6 @@
 #' @return A table to show the number of each aligned element's pairs.
 #' @export
 #'
-#' @importFrom checkAndDraw
-#' @importFrom g2plot
 #' @seealso  \code{\link[grid]{grid.ls}}
 #' @examples \dontrun{
 #'   if (require(ggplot2)) {
@@ -62,8 +60,6 @@ checkAlignment.ggplot <- function(g, show = "both", showInOne = FALSE,
                                   align="b", include=".", exclude=NULL,
                                   separateText = TRUE, rounding=4) {
   png("plot0.png", width=400, height=400)
-  #print(g)
-  #grid.force()
   g2plot(g)
   checkAndDraw(g, show, showInOne, align, include, exclude, separateText, rounding)
 }
@@ -73,7 +69,6 @@ checkAlignment.trellis <- function(g, show = "both", showInOne = FALSE,
                                    align="b", include=".", exclude=NULL,
                                    separateText = TRUE, rounding=4) {
   png("plot0.png", width=400, height=400)
-  #print(g)
   g2plot(g)
   checkAndDraw(g, show, showInOne, align, include, exclude, separateText, rounding)
 }
@@ -83,8 +78,6 @@ checkAlignment.function <- function(g, show = "both", showInOne = FALSE,
                                     align="b", include=".", exclude=NULL,
                                     separateText = TRUE, rounding=4) {
   png("plot0.png", width=400, height=400)
-  # grid.newpage()
-  # print(gridGraphics::grid.echo(g))
   g2plot(g)
   checkAndDraw(g, show, showInOne, align, include, exclude, separateText, rounding)
 }
@@ -94,7 +87,6 @@ checkAlignment.recordedplot <- function(g, show = "both", showInOne = FALSE,
                                         align="b", include=".", exclude=NULL,
                                         separateText = TRUE, rounding=4) {
   png("plot0.png", width=400, height=400)
-  replayPlot(g)
-  gridGraphics::grid.echo()
+  g2plot(g)
   checkAndDraw(g, show, showInOne, align, include, exclude, separateText, rounding)
 }

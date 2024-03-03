@@ -5,9 +5,10 @@ checkalign1 <- function() {
     g <- ggplot(mtcars) + geom_point(aes(disp, mpg, color=factor(vs))) +
       labs(title = "test") + facet_wrap(~gear)
   } else {
-    cat("The example requires 'ggplot2' which is not installed.")
+    warning("The example requires 'ggplot2' which is not installed.")
   }
-  checkAlignment(g, rounding=4, show = "unaligned")
+  res <- checkAlignment(g, rounding=4, show = "unaligned")
+  res
 }
 
 checkalign2 <- function() {
@@ -15,10 +16,10 @@ checkalign2 <- function() {
     g <- ggplot(mtcars) + geom_point(aes(disp, mpg, color=factor(vs))) +
       labs(title = "test") + facet_wrap(~gear)
   } else {
-    cat("The example requires 'ggplot2' which is not installed.")
+    warning("The example requires 'ggplot2' which is not installed.")
   }
   res <- checkAlignment(g, include="text", exclude=c("tag", "points"), rounding=4)
-  cat("\nAligned grobs number for each (name omit):", res)
+  res
 }
 
 checkalign3 <- function() {
@@ -26,59 +27,98 @@ checkalign3 <- function() {
     g <- ggplot(mtcars) + geom_point(aes(disp, mpg, color=factor(vs))) +
       labs(title = "test") + facet_wrap(~gear)
   } else {
-    cat("The example requires 'ggplot2' which is not installed.")
+    warning("The example requires 'ggplot2' which is not installed.")
   }
   res <- checkAlignment(g, showInOne=TRUE, include="text",
                         exclude=c("tag", "points"), rounding=4)
-  cat("\nAligned grobs number for each (name omit):", res)
+  res
 }
 
 checkalign4 <- function() {
   if (require(ggplot2)) {
     g <- ggplot(mtcars) + geom_point(aes(disp, mpg))
   } else {
-    cat("The example requires 'ggplot2' which is not installed.")
+    warning("The example requires 'ggplot2' which is not installed.")
   }
   res <- checkAlignment(g, rounding=3, show = "aligned", align="v")
-  cat("\nAligned grobs number for each (name omit):", res)
+  res
 }
 
 checkalign5 <- function() {
   if (require(ggplot2)) {
     g <- ggplot(mtcars) + geom_point(aes(disp, mpg))
   } else {
-    cat("The example requires 'ggplot2' which is not installed.")
+    warning("The example requires 'ggplot2' which is not installed.")
   }
   res <- checkAlignment(g, rounding=3, show = "aligned", align="b")
-  cat("\nAligned grobs number for each (name omit):", res)
+  res
 }
 
 checkalign6 <- function() {
   if (require(lattice)) {
     g <- xyplot(mpg ~ disp | vs, data = mtcars, type = "p", main = "Scatterplot Example")
   } else {
-    cat("The example requires 'lattice' which is not installed.")
+    warning("The example requires 'lattice' which is not installed.")
   }
-  checkAlignment(g, exclude="background",
+  res <- checkAlignment(g, exclude="background",
                  include = c("lab", "textl"), rounding=2)
+  res
 }
 
 checkalign7 <- function() {
   x <- function() plot(mtcars$mpg, mtcars$vs)
-  checkAlignment(x, include="axis")
+  res <- checkAlignment(x, include="axis")
+  res
 }
 
 checkalign8 <- function() {
   x1 <- function() print("yes")
-  checkAlignment(x1, include="axis")
+  res <- checkAlignment(x1, include="axis")
+  res
 }
 
 checkalign9 <- function() {
   plot(mtcars$mpg, mtcars$disp)
   y <- recordPlot()
   replayPlot(y)
-  checkAlignment(y, include="axis")
+  res <- checkAlignment(y, include="axis")
+  res
 }
 
 
+
+tryCatch({
+  res <- checkalign2()
+  if (any(grepl("xlab", res[[1]])) && any(grepl("ylab", res[[1]])) && length(res[[1]]) == 2) {
+    message("Correct Result for Test 2\n")
+  } else {
+    warning("Wrong Result for Test 2\n")
+  }
+}, error = function(e) {
+  warning("Test 2 Not Run\n")
+})
+
+
+
+tryCatch({
+  res <- checkalign4()
+  if (any(grepl("xlab", res[[1]])) && any(grepl("ylab", res[[1]])) && length(res[[1]]) == 2) {
+    message("Correct Result for Test 4\n")
+  } else {
+    warning("Wrong Result for Test 4\n")
+  }
+}, error = function(e) {
+  warning("Test 4 Not Run\n")
+})
+
+tryCatch({
+  res <- checkalign8()
+  if (any(grepl("xlab", res[[1]])) && any(grepl("ylab", res[[1]])) && length(res[[1]]) == 2) {
+    message("Correct Result for Test 8\n")
+  } else {
+    warning("Wrong Result for Test 8\n")
+  }
+}, error = function(e) {
+  warning("Test 8 Not Run\n")
+})
 
