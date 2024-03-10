@@ -1,8 +1,4 @@
 excludeGrob <- function(grobInfo, exclude) {
-  # findMatch <- function(exclude) {
-  #   sapply(grid.grep(exclude, grep = TRUE, global = TRUE), as.character)
-  # }
-  # matches <- unlist(lapply(exclude, findMatch))
   exclude <- paste(exclude, collapse = "|")
   findGrob <- function(g) {
     # !attr(g, "name") %in% matches
@@ -13,10 +9,6 @@ excludeGrob <- function(grobInfo, exclude) {
 
 
 includeGrob <- function(grobInfo, include) {
-  # findMatch <- function(include) {
-  #   sapply(grid.grep(include, grep = TRUE, global = TRUE), as.character)
-  # }
-  # matches <- unlist(lapply(include, findMatch))
   include <- paste(include, collapse = "|")
   findGrob <- function(g) {
     # attr(g, "name") %in% matches
@@ -43,7 +35,7 @@ editGrobIndex <- function(gPath, vPath, index, len) {
 drawNotAligned <- function(notAlignInfo, listing, listing_new, item) {
   res <- 0
   if (length(notAlignInfo) != 0) {
-    cat("\nNot Aligned!!\n")
+    # cat("\nNot Aligned!!\n")
     res <- character(length(notAlignInfo)/3)
     k <- 0
     for (i in 1:(length(notAlignInfo)/3)) {
@@ -56,7 +48,7 @@ drawNotAligned <- function(notAlignInfo, listing, listing_new, item) {
         vPath <- listing_new[notAlignInfo[1, i], "vpPath"]
         k <- k + 1
         res[k] <- paste(as.character(gPath), "-", notAlignInfo[2, i])
-        cat(res[k], "\n")
+        # cat(res[k], "\n")
         editGrobIndex(gPath, vPath, notAlignInfo[2, i], notAlignInfo[3, i])
       }
     }
@@ -101,8 +93,8 @@ countFacets <- function(matchInfo, grobInfo, item, r, align) {
       }
     }
   }
-  cat("\nFacets ")
-  cat(grDevices::n2mfrow(cnt))
+  # cat("\nFacets ")
+  # cat(grDevices::n2mfrow(cnt))
   nrow <- n2mfrow(cnt)[1]
   ncol <- n2mfrow(cnt)[2]
   c(nrow, ncol)
@@ -112,19 +104,23 @@ countFacets <- function(matchInfo, grobInfo, item, r, align) {
 drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, showInOne) {
   nrow <- RandC[1]
   ncol <- RandC[2]
-  if (nrow*ncol > 25 | nrow*ncol == 0 | showInOne) {  # if too many facets
+  if (nrow*ncol > 25 | nrow*ncol == 0
+      | showInOne == TRUE | showInOne == "hi") {
+    if (nrow*ncol>25)
+      warning("Too many facets for this check!")
     nrow <- 1
     ncol <- 1
     cvp <- viewport(width = grobInfo[[1]]["right"], height = grobInfo[[1]]["top"],
                     default.units = "inch")
-    g2plot(g)
+    if (showInOne == FALSE)
+      g2plot(g)
   }
-  vps <- viewport(layout = grid.layout(nrow, ncol))
+  if (showInOne != "hi") {
+    vps <- viewport(layout = grid.layout(nrow, ncol))
+    pushViewport(vps)
+    j = 1
+  }
   img0 <- readPNG("plot0.png")
-  unlink("plot0.png")
-  pushViewport(vps)
-  j = 1
-
   matches <- logical(length(item))
   if (align=="b" | align=="v") {
     for (index in seq_along(matchInfo$x)) {
@@ -136,13 +132,18 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, showInOne) 
           break
         }
       if (flag) {
-        if (nrow*ncol != 1) {
+        if (showInOne != "hi" && nrow*ncol != 1) {
           crow <- ceiling(j / ncol)
           ccol <- j %% ncol
           ccol[ccol == 0] <- ncol
           cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
-          grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
+          if (showInOne == FALSE)
+            grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
           j = j + 1
+        }
+        if (showInOne == "hi") {
+          grid.newpage()
+          grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
         }
         for (i in matchInfo$xAlignment[[index]]) {
           lty = 3
@@ -179,15 +180,20 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, showInOne) 
           break
         }
       if (flag) {
-        if (nrow*ncol != 1) {
+        if (showInOne != "hi" && nrow*ncol != 1) {
           crow <- ceiling(j / ncol)
           ccol <- j %% ncol
           ccol[ccol == 0] <- ncol
           cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
           vp_width <- convertWidth(unit(cvp$width, "mm"), "in", valueOnly = TRUE)
           vp_height <- convertHeight(unit(cvp$height, "mm"), "in", valueOnly = TRUE)
-          grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
+          if (showInOne == FALSE)
+            grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
           j = j + 1
+        }
+        if (showInOne == "hi") {
+          grid.newpage()
+          grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
         }
         for (i in matchInfo$yAlignment[[index]]) {
           lty = 3
@@ -215,10 +221,10 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, showInOne) 
     }
   }
   upViewport(0)
-  if (length(item[matches])>0)
-    cat("\nAligned!!\n")
-  for (i in seq_along(item[matches]))
-    cat(item[matches][i], "\n")
+  # if (length(item[matches])>0)
+  #   cat("\nAligned!!\n")
+  # for (i in seq_along(item[matches]))
+  #   cat(item[matches][i], "\n")
   item[matches]
 }
 

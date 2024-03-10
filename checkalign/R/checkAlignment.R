@@ -16,9 +16,10 @@
 #' A character value indicating which hints to be shown.
 #' Possible values are "both", "unaligned", and "aligned".
 #' @param showInOne
-#' A logic value indicating whether the plot showing aligned elements to be shown in facets.
+#' A value indicating whether the plot showing aligned elements to be shown in facets.
 #' If "TRUE", all the subplots will be shown in one.
 #' Default value is "FALSE". If "FALSE", all the subplots (no more than 25) will be shown in facets.
+#' If "hi", all the subplots will be shown along with prompting to the user.
 #' @param align
 #' A numeric value indicating which hints of aligned elements to be shown.
 #' "v" means vertical alignments, "h" means horizontal alignments and default value "b"

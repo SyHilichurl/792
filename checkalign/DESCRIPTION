@@ -10,7 +10,7 @@ Author: Shiyi Developer [aut, cre],
 Maintainer: Shiyi Developer <sche753@aucklanduni.ac.nz>
 Depends: R (>= 4.2.1), grid, png
 Imports: grid, png
-Suggests: ggplot2, lattice, girdGraphics
+Suggests: ggplot2, lattice, gridGraphics
 Description: Check if graphics follow some design principles
 License: GPL (>= 3)
 URL: https://github.com/SyHilichurl/792
