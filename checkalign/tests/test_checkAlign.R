@@ -29,7 +29,7 @@ checkalign3 <- function() {
   } else {
     warning("The example requires 'ggplot2' which is not installed.")
   }
-  res <- checkAlignment(g, showInOne=TRUE, include="text",
+  res <- checkAlignment(g, facet="off", include="text",
                         exclude=c("tag", "points"), rounding=4)
   res
 }
@@ -41,11 +41,11 @@ checkalign4 <- function() {
   } else {
     warning("The example requires 'ggplot2' which is not installed.")
   }
-  res <- checkAlignment(g, showInOne="hi", include="text",
+  res <- checkAlignment(g, facet="page", include="text",
                         exclude=c("tag", "points"), rounding=4)
-  # res <- checkAlignment(g, showInOne="hi", include="text", show = "unaligned",
+  # res <- checkAlignment(g, facet="page", include="text", show = "unaligned",
   #                       exclude=c("tag", "points"), rounding=4)
-  # res <- checkAlignment(g, showInOne="hi", include="text", show = "aligned",
+  # res <- checkAlignment(g, facet="page", include="text", show = "aligned",
   #                       exclude=c("tag", "points"), rounding=4)
   res
 }

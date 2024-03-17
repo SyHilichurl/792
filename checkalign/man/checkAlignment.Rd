@@ -11,10 +11,10 @@ include=".", exclude=NULL, separateText = TRUE, rounding=4)
 \item{show}{A character value indicating which hints to be shown.
 Possible values are "both", "unaligned", and "aligned".}
 
-\item{showInOne}{A value indicating whether the plot showing aligned elements to be shown in facets.
-If "TRUE", all the subplots will be shown in one.
-Default value is "FALSE". If "FALSE", all the subplots (no more than 25) will be shown in facets.
-If "hi", all the subplots will be shown along with prompting to the user.}
+\item{facet}{A character value indicating whether the plot showing aligned elements to be shown in facets.
+Default value is "on". If "on", all the subplots (no more than 25) will be shown in facets.
+If "off", all the subplots will be shown in one.
+If "page", all the subplots will be shown along with prompting to the user.}
 
 \item{align}{A numeric value indicating which hints of aligned elements to be shown.
 "v" means vertical alignments, "h" means horizontal alignments and default value "b"

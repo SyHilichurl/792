@@ -65,7 +65,7 @@ nameFour <- function(x, rounding) {
   result
 }
 
-countFacets <- function(matchInfo, grobInfo, item, r, align) {
+countFacets <- function(matchInfo, grobInfo, item, r, align, facet) {
   cnt=0
   if (align=="b" | align=="v") {
     for (index in seq_along(matchInfo$x)) {
@@ -93,6 +93,8 @@ countFacets <- function(matchInfo, grobInfo, item, r, align) {
       }
     }
   }
+  if (facet == "on")
+    cnt = cnt + 1
   # cat("\nFacets ")
   # cat(grDevices::n2mfrow(cnt))
   nrow <- n2mfrow(cnt)[1]
@@ -101,27 +103,38 @@ countFacets <- function(matchInfo, grobInfo, item, r, align) {
 }
 
 
-drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, showInOne) {
+drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, facet, show) {
   nrow <- RandC[1]
   ncol <- RandC[2]
   if (nrow*ncol > 25 | nrow*ncol == 0
-      | showInOne == TRUE | showInOne == "hi") {
+      | facet == "off" | facet == "page") {
     if (nrow*ncol>25)
       warning("Too many facets for this check!")
     nrow <- 1
     ncol <- 1
     cvp <- viewport(width = grobInfo[[1]]["right"], height = grobInfo[[1]]["top"],
                     default.units = "inch")
-    if (showInOne == FALSE)
+    if (facet == "on")
       g2plot(g)
   }
-  if (showInOne != "hi") {
+  if (facet != "page") {
     vps <- viewport(layout = grid.layout(nrow, ncol))
     pushViewport(vps)
     j = 1
   }
   img0 <- readPNG("plot0.png")
   matches <- logical(length(item))
+  if (facet == "on" && nrow*ncol != 1 && show == "both") {
+    crow <- ceiling(j / ncol)
+    ccol <- j %% ncol
+    ccol[ccol == 0] <- ncol
+    cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
+    vp_width <- convertWidth(unit(cvp$width, "mm"), "in", valueOnly = TRUE)
+    vp_height <- convertHeight(unit(cvp$height, "mm"), "in", valueOnly = TRUE)
+    img1 <- readPNG("plot_unaligned.png")
+    grid.raster(img1,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
+    j = j + 1
+  }
   if (align=="b" | align=="v") {
     for (index in seq_along(matchInfo$x)) {
       flag = FALSE
@@ -132,25 +145,27 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, showInOne) 
           break
         }
       if (flag) {
-        if (showInOne != "hi" && nrow*ncol != 1) {
+        if (facet != "page" && nrow*ncol != 1) {
           crow <- ceiling(j / ncol)
           ccol <- j %% ncol
           ccol[ccol == 0] <- ncol
           cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
-          if (showInOne == FALSE)
+          if (facet == "on")
             grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
           j = j + 1
         }
-        if (showInOne == "hi") {
+        if (facet == "page") {
           grid.newpage()
           grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
         }
+        title <- ""
         for (i in matchInfo$xAlignment[[index]]) {
           lty = 3
           tmp <- attr(grobInfo[[i]], "name")
           if (tmp %in% item) {
             lty = 1
             matches[which(item==tmp)] <- TRUE
+            if (title=="") title <- tmp
           }
           x = grobInfo[[i]][1]/ncol
           width = (grobInfo[[i]][2] - grobInfo[[i]][1])/ncol
@@ -164,6 +179,11 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, showInOne) 
                     name = name, vp=cvp)
           cnt = cnt + 1
         }
+        title <- substr(title,
+                        gregexpr("::",title)[[1]][length(gregexpr("::",title)[[1]])]+2,
+                        nchar(title))
+        grid.text(title, vp=cvp,
+                  gp=gpar(col="green", cex=1))
         grid.lines(x = matchInfo$x[index]/ncol, default.units = "in",
                    gp = gpar(col = "blue"), vp=cvp,
                    name = paste0("x.", nameFour(matchInfo$x[index],r), ".alignment"))
@@ -180,27 +200,29 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, showInOne) 
           break
         }
       if (flag) {
-        if (showInOne != "hi" && nrow*ncol != 1) {
+        if (facet != "page" && nrow*ncol != 1) {
           crow <- ceiling(j / ncol)
           ccol <- j %% ncol
           ccol[ccol == 0] <- ncol
           cvp = viewport(layout.pos.row = crow, layout.pos.col = ccol)
           vp_width <- convertWidth(unit(cvp$width, "mm"), "in", valueOnly = TRUE)
           vp_height <- convertHeight(unit(cvp$height, "mm"), "in", valueOnly = TRUE)
-          if (showInOne == FALSE)
+          if (facet == "on")
             grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
           j = j + 1
         }
-        if (showInOne == "hi") {
+        if (facet == "page") {
           grid.newpage()
           grid.raster(img0,interpolate=FALSE,height=unit(1,"npc"), width=unit(1, "npc"), vp=cvp)
         }
+        title <- ""
         for (i in matchInfo$yAlignment[[index]]) {
           lty = 3
           tmp <- attr(grobInfo[[i]], "name")
           if (tmp %in% item) {
             lty = 1
             matches[which(item==tmp)] <- TRUE
+            if (title == "") title <- tmp
           }
           x = grobInfo[[i]][1]/ncol
           width = (grobInfo[[i]][2] - grobInfo[[i]][1])/ncol
@@ -214,6 +236,12 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, showInOne) 
                     name = name, vp=cvp)
           cnt = cnt + 1
         }
+        if (gregexpr("::", title)[[1]] != -1)
+          title <- substr(title,
+                          gregexpr("::",title)[[1]][length(gregexpr("::",title)[[1]])]+2,
+                          nchar(title))
+        grid.text(title, vp=cvp,
+                  gp=gpar(col="green", cex=1))
         grid.lines(y = matchInfo$y[index]/nrow, default.units = "in",
                    gp = gpar(col = "blue"), vp=cvp,
                    name = paste0("y.", nameFour(matchInfo$y[index],r), ".alignment"))
