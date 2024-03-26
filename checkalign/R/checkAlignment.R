@@ -10,7 +10,7 @@
 #' @usage
 #' checkAlignment(g, show = "both", align="b",
 #' include=".", exclude=NULL, separateText = TRUE, rounding=4)
-#' @param x
+#' @param g
 #' A graphic value (e.g. a ggplot)
 #' @param show
 #' A character value indicating which hints to be shown.
