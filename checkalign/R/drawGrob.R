@@ -236,7 +236,7 @@ drawMatch <- function(g, matchInfo, grobInfo, item, r, align, RandC, facet, show
                     name = name, vp=cvp)
           cnt = cnt + 1
         }
-        if (gregexpr("::", title)[[1]] != -1)
+        if (gregexpr("::", title)[[1]][1] != -1)
           title <- substr(title,
                           gregexpr("::",title)[[1]][length(gregexpr("::",title)[[1]])]+2,
                           nchar(title))
