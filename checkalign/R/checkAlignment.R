@@ -65,7 +65,8 @@ checkAlignment.ggplot <- function(g, show = "both", facet = "on",
                                   separateText = TRUE, rounding=4) {
   png("plot0.png", width=400, height=400)
   g2plot(g)
-  checkAndDraw(g, show, facet, align, include, exclude, separateText, rounding)
+  res <- checkAndDraw(g, show, facet, align, include, exclude, separateText, rounding)
+  invisible(res)
 }
 
 #' @export
@@ -74,7 +75,8 @@ checkAlignment.trellis <- function(g, show = "both", facet = "on",
                                    separateText = TRUE, rounding=4) {
   png("plot0.png", width=400, height=400)
   g2plot(g)
-  checkAndDraw(g, show, facet, align, include, exclude, separateText, rounding)
+  res <- checkAndDraw(g, show, facet, align, include, exclude, separateText, rounding)
+  invisible(res)
 }
 
 #' @export
@@ -83,7 +85,8 @@ checkAlignment.function <- function(g, show = "both", facet = "on",
                                     separateText = TRUE, rounding=4) {
   png("plot0.png", width=400, height=400)
   g2plot(g)
-  checkAndDraw(g, show, facet, align, include, exclude, separateText, rounding)
+  res <- checkAndDraw(g, show, facet, align, include, exclude, separateText, rounding)
+  invisible(res)
 }
 
 #' @export
@@ -92,5 +95,6 @@ checkAlignment.recordedplot <- function(g, show = "both", facet = "on",
                                         separateText = TRUE, rounding=4) {
   png("plot0.png", width=400, height=400)
   g2plot(g)
-  checkAndDraw(g, show, facet, align, include, exclude, separateText, rounding)
+  res <- checkAndDraw(g, show, facet, align, include, exclude, separateText, rounding)
+  invisible(res)
 }
